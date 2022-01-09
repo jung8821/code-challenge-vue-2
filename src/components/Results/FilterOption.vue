@@ -1,5 +1,5 @@
 <template>
-  <div className="filter_container">
+  <div class="filter_container">
     <div>
       <select v-model="filter.policyMax" class="input_box">
         <option value="0">Any Policy Max</option>
@@ -51,4 +51,24 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../../global.scss";
+
+.filter_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  padding: 20px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: $borderColor;
+
+  div {
+    margin: auto;
+  }
+  .input_box {
+    border-width: 1px;
+    border-color: $borderColor;
+  }
+}
 </style>

@@ -1,14 +1,21 @@
 <template>
   <div>
     <FilterOption v-bind:filter="filter" />
-    <PlanContainer />
-    {{ filter }}
+    <PlanContainer
+      v-bind:quotes="filteredData"
+      v-bind:sortType="sortType"
+      v-bind:viewType="viewType"
+      v-bind:filter="filter"
+      v-on:changeViewType="changeViewType"
+      v-on:changeSortType="changeSortType"
+    />
   </div>
 </template>
 
 <script>
 import FilterOption from "../components/Results/FilterOption";
 import PlanContainer from "../components/Results/PlanContainer";
+import axios from "axios";
 
 export default {
   name: "Results",
@@ -19,6 +26,7 @@ export default {
   data() {
     return {
       data: [],
+      filteredData: [],
       sortType: "sort",
       viewType: "list",
       filter: {
@@ -29,194 +37,89 @@ export default {
       },
     };
   },
-  //   methods: {
-  //     handleFilterData(filters) {
-  //       this.filter.policyMax = filters.policyMax;
-  //       this.filter.type = filters.type;
-  //       this.filter.section = filters.section;
-  //       this.filter.bestSeller = filters.bestSeller;
-  //     },
-  //   },
+
+  watch: {
+    sortType: function () {
+      this.sortData();
+    },
+    // Change data when filter changes
+    filter: {
+      deep: true,
+      handler() {
+        this.filterData();
+        this.sortData();
+      },
+    },
+  },
+
+  created: function () {
+    axios
+      .get("http://localhost:8080/quotes")
+      .then((res) => {
+        this.data = res.data.quotes;
+        this.filteredData = res.data.quotes;
+      })
+      .catch((err) => console.log(err));
+  },
+
+  methods: {
+    // Filter Quotes
+    filterData() {
+      const tempData = this.data;
+      let checkFilter = (e) => {
+        // NOTE: PolicyMax do not exist in the mockData
+        return (
+          //(filter.policyMax === '0'? e.policyMax === e.policyMax : e.policyMax === filter.policyMax)&&
+          (this.filter.type === "anyType"
+            ? e.type === e.type
+            : e.type === this.filter.type) &&
+          (this.filter.section === "anySection"
+            ? e.section === e.section
+            : e.section === this.filter.section) &&
+          (this.filter.bestSeller === false
+            ? e.bestSellers === e.bestSellers
+            : e.bestSellers === this.filter.bestSeller)
+        );
+      };
+      this.filteredData = tempData.filter(checkFilter);
+    },
+
+    // Sort Quotes
+    sortData() {
+      let sortedData = this.filteredData;
+      // Compare by sort type
+      switch (this.sortType) {
+        case "sort":
+          break;
+        case "name":
+          sortedData.sort((a, b) =>
+            a[this.sortType].localeCompare(b[this.sortType])
+          );
+          break;
+        case "lowToHighPrice":
+          sortedData.sort((a, b) => a["price"] - b["price"]);
+          break;
+        case "HighToLowPrice":
+          sortedData.sort((a, b) => b["price"] - a["price"]);
+          break;
+        default:
+          break;
+      }
+
+      this.filteredData = sortedData;
+    },
+    // Change View
+    changeViewType(view) {
+      this.viewType = view;
+    },
+    // Change Sorting
+    changeSortType(sort) {
+      this.sortType = sort;
+    },
+  },
 };
 </script>
 
 <style lang="scss">
 @import "../global.scss";
-
-.view-button {
-  width: 40px;
-  height: 40px;
-  border-width: 1px;
-  cursor: pointer;
-
-  &.list {
-    background-color: #508fc2;
-    transition: all 0.2s ease;
-  }
-  &.grid {
-    background-color: #508fc2;
-    transition: all 0.2s ease;
-  }
-}
-h1 {
-  color: #045ca5;
-}
-.list_button {
-  background-image: url("../assets/list_icon.png");
-  background-repeat: no-repeat;
-  background-size: 100%;
-}
-.grid_button {
-  background-image: url("../assets/grid_icon.png");
-  background-repeat: no-repeat;
-  background-size: 100%;
-}
-.title_container {
-  margin-top: 50px;
-
-  .compare_button {
-    width: 150px;
-    font-size: 1em;
-    margin-top: 25px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    border-width: 0;
-    border-radius: 5px;
-    color: #fff;
-    background-color: #ed8029;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    &:hover {
-      background-color: #ff7300;
-      transition: all 0.2s ease;
-    }
-    &:disabled {
-      background-color: grey;
-      cursor: default;
-      transition: all 0.2s ease;
-    }
-  }
-  .view_option_container {
-    width: 100%;
-    display: flex;
-    margin-left: 50px;
-    margin-top: 10px;
-    justify-content: left;
-    justify-self: left;
-  }
-  .sort_container {
-    display: block;
-    margin: auto;
-
-    .sort_select {
-      border-width: 1px;
-      border-color: $borderColor;
-    }
-  }
-}
-
-.quote_container {
-  margin: 20px;
-  font-family: Arial, Helvetica, sans-serif;
-
-  .quote_wrapper {
-    border-width: 1px;
-    border-style: solid;
-    border-color: $borderColor;
-    border-radius: 10px;
-    padding: 15px;
-    margin: 15px;
-    &:hover {
-      background-color: rgba(30, 101, 134, 0.212);
-      transition: all 0.2s ease;
-    }
-
-    .quote_header_wrapper {
-      display: flex;
-      width: 100%;
-      font-size: large;
-      font-weight: bold;
-      margin-bottom: 25px;
-
-      .quote_name {
-        flex: 0.5;
-        text-align: left;
-      }
-      .quote_price {
-        flex: 0.5;
-        text-align: right;
-        justify-self: right;
-        color: rgb(17, 0, 255);
-      }
-    }
-    .quote_body {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      row-gap: 15px;
-      column-gap: 15px;
-      text-align: left;
-      color: rgba(32, 115, 163, 0.979);
-
-      img {
-        width: 15px;
-        margin-right: 2px;
-      }
-    }
-
-    .checkbox {
-      width: 100%;
-      display: flex;
-      justify-content: right;
-      align-items: center;
-      margin-bottom: 5px;
-
-      label {
-        font-size: 13px;
-        font-weight: bold;
-      }
-    }
-  }
-
-  &.list {
-    display: flex;
-    flex-direction: column;
-  }
-  &.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-}
-.filter_container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  padding: 20px;
-  border-style: solid;
-  border-width: 1px;
-  border-color: $borderColor;
-
-  div {
-    margin: auto;
-  }
-  .input_box {
-    border-width: 1px;
-    border-color: $borderColor;
-  }
-}
-@media only screen and (max-width: 600px) {
-  .view_option_container {
-    display: none;
-  }
-  .quote_container {
-    .quote_wrapper {
-      display: flex;
-      flex-direction: column;
-    }
-    &.grid {
-      display: flex;
-      flex-direction: column;
-    }
-  }
-}
 </style>
