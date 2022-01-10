@@ -70,8 +70,22 @@ export default {
     };
   },
   methods: {
+    // Send data to compare component page
     handleCompare() {
-      console.log("compare");
+      let compareData = [];
+
+      const findData = (item) => {
+        let pulledData = this.quotes.find((id) => {
+          return id.id === item;
+        });
+        compareData.push(pulledData);
+      };
+      this.selected.forEach(findData);
+
+      this.$router.push({
+        name: "Compare",
+        query: { q: this.selected },
+      });
     },
     // Handle selected quotes
     handleSelected(quote) {
@@ -93,7 +107,6 @@ export default {
         );
       }
       this.selected = newSelected;
-      console.log(this.selected);
     },
     // Disable Checkbox
     isCheckboxDisabled(quote) {
@@ -105,11 +118,9 @@ export default {
   },
 
   changeViewType(view) {
-    console.log(view);
     this.viewType = view;
   },
   changeSortType(sort) {
-    console.log(sort);
     this.sortType = sort;
   },
   computed: {

@@ -15,12 +15,14 @@ const routes = [
   {
     path: '/results',
     name: 'Results',
-    component: Results
+    component: Results,
+    props: true
   },
   {
     path: '/results/compare',
     name: 'Compare',
-    component: Compare
+    component: Compare,
+    props: true
   }
 ]
 
