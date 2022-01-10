@@ -106,7 +106,7 @@ export default {
       compareData = compareData.slice(0, 4);
       this.selectedQuote = compareData;
     },
-
+    // Background Colors for each quote
     quoteNameClass(item) {
       if (item !== null) {
         switch (item) {
