@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="topHeader">
-      <img class="logo" v-bind:src="require('../../assets/logo.png')" />
+      <img class="logo" v-bind:src="require('../../assets/vue.png')" />
       <span class="header">Travel Insurance</span>
     </div>
     <div>
