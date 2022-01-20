@@ -1,13 +1,6 @@
 <template>
   <div class="filter_container">
     <div>
-      <select v-model="filter.policyMax" class="input_box">
-        <option value="0">Any Policy Max</option>
-        <option value="50">50,000</option>
-        <option value="100">100,000</option>
-        <option value="250">250,000</option>
-        <option value="500">500,000</option>
-      </select>
     </div>
     <div>
       <input
