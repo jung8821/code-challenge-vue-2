@@ -3,7 +3,7 @@
 
 <body>
 <div class="header">
-  <h1>Insubuy code challenge</h1>
+  <h1>Code Challenge Project</h1>
 </div>
 
 <div class="rules">
