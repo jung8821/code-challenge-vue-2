@@ -20,7 +20,7 @@ export default {
       const { startDate, endDate, citizenShip, policyMax, age, mailingState } =
         formData;
       try {
-        const response = await axios.post(`http://localhost:8080/quotes`, {
+        const response = await axios.post(process.env.VUE_APP_BACK_API_URL + process.env.VUE_APP_BACK_API_QUOTE, {
           startDate,
           endDate,
           citizenShip,

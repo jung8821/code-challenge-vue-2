@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="topHeader">
-      <img class="logo" v-bind:src="require('../../assets/Insubuy_Logo.png')" />
+      <img class="logo" v-bind:src="require('../../assets/logo.png')" />
       <span class="header">Travel Insurance</span>
     </div>
     <div>
@@ -261,8 +261,8 @@ export default {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
 
   .logo {
-    height: 37px;
-    width: 100px;
+    height: 50px;
+    width: 50px;
     margin: 20px 10px 20px 15px;
   }
   .header {

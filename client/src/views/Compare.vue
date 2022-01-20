@@ -80,7 +80,7 @@ export default {
   created: function () {
     // Get quotes from back end
     axios
-      .get("http://localhost:8080/quotes")
+      .get(process.env.VUE_APP_BACK_API_URL + process.env.VUE_APP_BACK_API_QUOTE)
       .then((res) => {
         this.handleData(res.data.quotes);
       })
