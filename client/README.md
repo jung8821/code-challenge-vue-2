@@ -3,7 +3,7 @@
 
 # Project Info
 - This was a code challenge project done with vue.js.
-- Visit: https://code-challenge-reactjs.vercel.app/
+- Visit: https://code-challenge-vue-2.vercel.app/
 - Link to React.js version: https://github.com/jung8821/code-challenge-reactjs
 <html>
 
