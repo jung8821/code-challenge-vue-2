@@ -6,6 +6,7 @@
       v-bind:sortType="sortType"
       v-bind:viewType="viewType"
       v-bind:filter="filter"
+      v-bind:loading="loading"
       v-on:changeViewType="changeViewType"
       v-on:changeSortType="changeSortType"
     />
@@ -26,6 +27,7 @@ export default {
   data() {
     return {
       data: [],
+      loading: true,
       filteredData: [],
       sortType: "sort",
       viewType: "list",
@@ -53,22 +55,28 @@ export default {
   },
 
   created: function () {
-    axios
-      .get(process.env.VUE_APP_BACK_API_URL + process.env.VUE_APP_BACK_API_QUOTE)
-      .then((res) => {
-        this.data = res.data.quotes;
-        this.filteredData = res.data.quotes;
-      })
-      .catch((err) => console.log(err));
+    setTimeout(() => {
+      axios
+        .get(
+          process.env.VUE_APP_BACK_API_URL + process.env.VUE_APP_BACK_API_QUOTE
+        )
+        .then((res) => {
+          this.data = res.data.quotes;
+          this.filteredData = res.data.quotes;
+          this.loading = false;
+        })
+        .catch((err) => console.log(err));
+    }, 500);
   },
 
   methods: {
     // Filter Quotes
     filterData() {
       const tempData = this.data;
-      let checkFilter = (e) => {
-        // NOTE: PolicyMax do not exist in the mockData
-        return (
+      this.filteredData = tempData.filter(
+        (e) =>
+          // NOTE: PolicyMax do not exist in the mockData
+
           //(filter.policyMax === '0'? e.policyMax === e.policyMax : e.policyMax === filter.policyMax)&&
           (this.filter.type === "anyType"
             ? e.type === e.type
@@ -79,9 +87,7 @@ export default {
           (this.filter.bestSeller === false
             ? e.bestSellers === e.bestSellers
             : e.bestSellers === this.filter.bestSeller)
-        );
-      };
-      this.filteredData = tempData.filter(checkFilter);
+      );
     },
 
     // Sort Quotes

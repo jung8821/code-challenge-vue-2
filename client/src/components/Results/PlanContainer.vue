@@ -17,7 +17,8 @@
       </div>
     </div>
 
-    <div class="quote_container" v-bind:class="quoteClass">
+    <h1 v-if="loading">LOADING</h1>
+    <div v-else class="quote_container" v-bind:class="quoteClass">
       <div v-bind:key="quote.id" v-for="quote in quotes" class="quote_wrapper">
         <div>{{ quote.bestSellers === true ? "Best Seller" : "" }}</div>
         <div class="checkbox">
@@ -59,7 +60,7 @@ import SortOption from "./SortOption";
 
 export default {
   name: "PlanContainer",
-  props: ["quotes", "sortType", "viewType", "filter"],
+  props: ["quotes", "sortType", "viewType", "filter", "loading"],
   components: {
     ViewOption,
     SortOption,
