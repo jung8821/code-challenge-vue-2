@@ -50,6 +50,7 @@ input::-webkit-inner-spin-button {
   border-style: solid;
   border-color: $borderColor;
   max-width: 900px;
+  min-width: 10px;
   margin-top: 20px;
   background-color: white;
 }

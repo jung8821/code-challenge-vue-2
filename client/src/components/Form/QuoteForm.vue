@@ -111,7 +111,9 @@
           />
         </span>
         <span class="get_quotes">
-          <input class="button" type="submit" value="GET QUOTES" />
+          <input v-if="!loading" class="button" type="submit" value="GET QUOTES" />
+          <input v-if="loading" class="loader" type="submit" value=""/>
+
         </span>
         <span class="reset_form">
           <span v-on:click="resetForm">Reset Form</span>
@@ -139,6 +141,8 @@ export default {
       age: "",
       citizenShip: "",
       mailingState: "",
+      loading: false,
+      isSubmitting: false,
       errors: {
         policyMax: "",
         age: "",
@@ -169,7 +173,10 @@ export default {
   methods: {
     // Submit Form
     handleSubmit() {
-      if (this.validateForm()) {
+      
+      if (this.validateForm() && !this.isSubmitting) {
+        this.loading = true;
+        this.isSubmitting = true;
         let formData = {
           policyMax: this.policyMax,
           age: this.age,
@@ -316,6 +323,21 @@ export default {
       background-color: #ed8029;
       cursor: pointer;
       font-family: "Trebuchet MS", Helvetica, sans-serif;
+
+      
+    }
+    .loader {
+      border: 5px solid #f3f3f3; /* Light grey */
+      border-top: 5px solid #3498db; /* Blue */
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   }
   .reset_form {
@@ -404,6 +426,11 @@ export default {
       margin-bottom: 10px;
       a {
         cursor: pointer;
+      }
+    }
+    .dates{
+      .input_box{
+        max-width: 100px;
       }
     }
   }
